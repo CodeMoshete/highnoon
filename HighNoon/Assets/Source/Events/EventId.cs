@@ -1,0 +1,30 @@
+namespace Events
+{
+	public enum EventId
+	{
+		ApplicationExit,
+		NetPlayerDisconnected,
+		NetPlayerConnected,
+		NetPlayerIdentified,
+		PlayerAimed,
+        DebugUiActivated,
+		EntitySpawned,
+		EntityDestroyed,
+		EntityHealthUpdate,
+		EntityMoved,
+		EntityFired,
+		EntityFiredLocal,
+		EntityTransformUpdated,
+        GameStartTriggered,
+        HidePromptText,
+        ShowPromptText,
+        ShowTriggerPrompt,
+        VRControllerPulse,
+		VRControllerTriggerPress,
+		VRControllerTriggerRelease,
+		VRControllerTouchpadPress,
+		VRControllerTouchpadDrag,
+		VRControllerTouchpadRelease,
+		DebugCameraControlsActive
+	}
+}
