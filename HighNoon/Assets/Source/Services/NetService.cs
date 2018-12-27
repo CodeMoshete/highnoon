@@ -1,20 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Events;
-using Game.Controllers.Network.Enums;
-using Game.Controllers.Network.Types;
-using Game.Enums;
-using UnityEngine;
-using Photon;
-using Controllers.Interfaces;
 using Photon.Pun;
-using Models;
 using Photon.Realtime;
+using System;
+using UnityEngine;
 
 namespace Services
 {
-	public class NetService : MonoBehaviourPunCallbacks
+    public class NetService : MonoBehaviourPunCallbacks
 	{
 		private enum NetworkStatus
 		{
