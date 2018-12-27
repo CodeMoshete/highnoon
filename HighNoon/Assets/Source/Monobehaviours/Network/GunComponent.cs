@@ -76,16 +76,20 @@ public class GunComponent : MonoBehaviourPun
     public void Shoot()
     {
         Debug.Log("Bang!");
-        // TODO: Raycast hits
 
-        RaycastHit hit;
-        Ray ray = new Ray(Muzzle.position, Muzzle.forward);
-        if (Physics.Raycast(ray, out hit, 25f, testLayer))
+        if (photonView.Owner.IsLocal)
         {
-            Debug.Log("Shot: " + hit.collider.name);
-            PlayerComponent hitPlayer = 
-                hit.collider.transform.parent.GetComponent<PlayerComponent>();
-            hitPlayer.ScoreHit(hit.collider.gameObject.name);
+            RaycastHit hit;
+            Ray ray = new Ray(Muzzle.position, Muzzle.forward);
+            if (Physics.Raycast(ray, out hit, 25f, testLayer))
+            {
+                Debug.Log("Shot: " + hit.collider.name);
+                PlayerComponent hitPlayer =
+                    hit.collider.transform.parent.GetComponent<PlayerComponent>();
+
+                string limb = hit.collider.gameObject.name;
+                hitPlayer.photonView.RPC("ScoreHit", RpcTarget.Others, new object[] { limb });
+            }
         }
 
         GameObject bulletTrail = Instantiate(Resources.Load<GameObject>("ProjectilePath"));

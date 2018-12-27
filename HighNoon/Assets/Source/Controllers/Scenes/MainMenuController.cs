@@ -46,6 +46,7 @@ namespace Controllers
 		public void Start()
 		{
             m_mainMenu.SetActive(true);
+            Service.Rig.Body.transform.position = new Vector3(0f, 1f, 0f);
 		}
 
 		public void Unload()

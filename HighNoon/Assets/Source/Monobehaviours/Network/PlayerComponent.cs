@@ -45,8 +45,6 @@ public class PlayerComponent : MonoBehaviourPun
             Health -= 20;
         }
 
-        photonView.RPC("ScoreHit", RpcTarget.Others, new object[] { limb });
-
         if (Health <= 0)
         {
             Service.Events.SendEvent(EventId.PlayerKilled, photonView.Owner.UserId);
