@@ -42,6 +42,7 @@ public class HUDLogic : MonoBehaviour
         {
             isCountingDown = false;
             gameObject.SetActive(false);
+            onCountdownDone();
         }
     }
 
