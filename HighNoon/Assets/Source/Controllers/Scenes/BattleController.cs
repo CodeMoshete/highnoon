@@ -89,6 +89,7 @@ namespace Controllers
 
         private void OnPlayerKilled(object cookie)
         {
+            playerWeapon.GetComponent<GunComponent>().Pause();
             bool localPlayerWon = (string)cookie != PhotonNetwork.LocalPlayer.UserId;
             hudScreen.ShowGameOver(localPlayerWon, OnBattleDone);
         }

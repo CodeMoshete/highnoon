@@ -88,7 +88,7 @@ public class GunComponent : MonoBehaviourPun
                     hit.collider.transform.parent.GetComponent<PlayerComponent>();
 
                 string limb = hit.collider.gameObject.name;
-                hitPlayer.photonView.RPC("ScoreHit", RpcTarget.Others, new object[] { limb });
+                hitPlayer.photonView.RPC("ScoreHit", RpcTarget.All, new object[] { limb });
             }
         }
 

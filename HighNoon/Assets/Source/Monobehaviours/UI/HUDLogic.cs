@@ -65,6 +65,4 @@ public class HUDLogic : MonoBehaviour
         isCountingDown = false;
         onCountdownDone();
     }
-
-
 }
