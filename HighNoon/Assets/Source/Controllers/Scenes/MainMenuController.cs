@@ -21,6 +21,8 @@ namespace Controllers
         private GameObject m_mainMenu;
         private SceneLoadedCallback m_onSceneLoaded;
 
+        private GameObject playerWeapon;
+
 		public void Load(SceneLoadedCallback onLoadedCallback, object passedParams)
 		{
             m_mainMenu = GameObject.Instantiate(Resources.Load<GameObject>(MAIN_MENU_ID));
@@ -30,6 +32,7 @@ namespace Controllers
                 Service.Rig.Eye.GetComponent<Camera>();
 
             Service.Events.AddListener(EventId.GameStartTriggered, ConnectToRoom);
+
 
             m_onSceneLoaded = onLoadedCallback;
             m_onSceneLoaded();
@@ -57,10 +60,24 @@ namespace Controllers
                 Service.Rig.Body.transform.position,
                 Service.Rig.Body.transform.rotation);
 
-            GameObject playerWeapon = PhotonNetwork.Instantiate(
+            playerWeapon = PhotonNetwork.Instantiate(
                 "GunModel",
                 Service.Rig.Hand.transform.position,
                 Service.Rig.Hand.transform.rotation);
+
+            if (PhotonNetwork.PlayerList.Length > 1)
+            {
+                InitGame(null);
+            }
+            else
+            {
+                Service.Events.AddListener(EventId.NetPlayerConnected, InitGame);
+            }
+        }
+
+        private void InitGame(object cookie)
+        {
+            playerWeapon.GetComponent<GunComponent>().Init();
         }
 
 		public void Start()
@@ -73,6 +90,11 @@ namespace Controllers
             m_mainMenu.SetActive(true);
 			Service.FrameUpdate.RegisterForUpdate(this);
 		}
+
+        private void StartRound()
+        {
+
+        }
 
 		private void StartClicked()
 		{

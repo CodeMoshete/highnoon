@@ -11,6 +11,8 @@ public class GunComponent : MonoBehaviourPun
     public Transform Trigger;
     public Transform Muzzle;
 
+    private bool gameRunning;
+
     private bool isReadyToFire;
     private bool isPullingHammer;
     private float hammerStartPosition;
@@ -24,33 +26,46 @@ public class GunComponent : MonoBehaviourPun
         testLayer = LayerMask.GetMask("Limbs");
     }
 
-    void Update ()
+    public void Init()
+    {
+        gameRunning = true;
+    }
+
+    public void Pause()
+    {
+        gameRunning = false;
+    }
+
+    void Update()
     {
         if (!photonView.IsMine)
         {
             return;
         }
 
-        Vector2 primaryTouchpad = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
-        bool pressStarted = OVRInput.GetDown(OVRInput.Button.PrimaryTouchpad);
-        bool pressEnded = OVRInput.GetUp(OVRInput.Button.PrimaryTouchpad);
-
-        if (!isReadyToFire && pressStarted)
+        if (gameRunning)
         {
-            isPullingHammer = true;
-            hammerStartPosition = primaryTouchpad.y;
-        }
+            Vector2 primaryTouchpad = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
+            bool pressStarted = OVRInput.GetDown(OVRInput.Button.PrimaryTouchpad);
+            bool pressEnded = OVRInput.GetUp(OVRInput.Button.PrimaryTouchpad);
 
-        if (isPullingHammer && pressEnded)
-        {
-            isPullingHammer = false;
-            isReadyToFire = hammerStartPosition - primaryTouchpad.y > HAMMER_THRESHOLD;
-        }
+            if (!isReadyToFire && pressStarted)
+            {
+                isPullingHammer = true;
+                hammerStartPosition = primaryTouchpad.y;
+            }
 
-        bool isTriggerPressed = OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger);
-        if ((isTriggerPressed && isReadyToFire) || Input.GetKeyDown(KeyCode.F))
-        {
-            photonView.RPC("Shoot", RpcTarget.All);
+            if (isPullingHammer && pressEnded)
+            {
+                isPullingHammer = false;
+                isReadyToFire = hammerStartPosition - primaryTouchpad.y > HAMMER_THRESHOLD;
+            }
+
+            bool isTriggerPressed = OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger);
+            if ((isTriggerPressed && isReadyToFire) || Input.GetKeyDown(KeyCode.F))
+            {
+                photonView.RPC("Shoot", RpcTarget.All);
+            }
         }
 
         transform.position = gunLocator.position;

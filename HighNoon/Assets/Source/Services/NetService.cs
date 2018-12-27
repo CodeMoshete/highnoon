@@ -1,3 +1,4 @@
+using Events;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -83,6 +84,14 @@ namespace Services
             if (m_onStartGameLoad != null)
             {
                 m_onStartGameLoad();
+            }
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            if (newPlayer != PhotonNetwork.LocalPlayer)
+            {
+                Service.Events.SendEvent(EventId.NetPlayerConnected, newPlayer);
             }
         }
 
