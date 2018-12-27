@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 4781579772664200}
   - component: {fileID: 114417874179183604}
   - component: {fileID: 114499559635347856}
+  - component: {fileID: 114178299664719188}
   m_Layer: 0
   m_Name: GunModel
   m_TagString: Untagged
@@ -610,6 +611,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1511281125117818}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114178299664719188
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1630560153966008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
 --- !u!114 &114417874179183604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -638,10 +653,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 114178299664719188}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
