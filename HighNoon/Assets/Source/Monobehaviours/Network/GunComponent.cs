@@ -6,6 +6,7 @@ using UnityEngine;
 public class GunComponent : MonoBehaviourPun
 {
     private const float HAMMER_THRESHOLD = 0.5f;
+    private const float HAMMER_MAX_TILT = 60f;
 
     public Transform Hammer;
     public Transform Trigger;
@@ -55,13 +56,24 @@ public class GunComponent : MonoBehaviourPun
                 hammerStartPosition = primaryTouchpad.y;
             }
 
-            if (isPullingHammer && pressEnded)
+            if (isPullingHammer)
             {
-                isPullingHammer = false;
-                isReadyToFire = hammerStartPosition - primaryTouchpad.y > HAMMER_THRESHOLD;
+                float dragAmt = hammerStartPosition - primaryTouchpad.y;
+                float hammerTilt = Mathf.Clamp01(dragAmt * (1 / HAMMER_THRESHOLD)) * HAMMER_MAX_TILT;
+
+                if (pressEnded)
+                {
+                    isPullingHammer = false;
+                    isReadyToFire = dragAmt > HAMMER_THRESHOLD;
+                    hammerTilt = HAMMER_MAX_TILT;
+                }
+
+                Hammer.localEulerAngles = new Vector3(hammerTilt, 0f, 0f);
             }
 
-            bool isTriggerPressed = OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger);
+            bool isTriggerPressed = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger);
+            Trigger.localEulerAngles = new Vector3(isTriggerPressed ? 30f : 0f, 0f, 0f);
+
             if ((isTriggerPressed && isReadyToFire) || Input.GetKeyDown(KeyCode.F))
             {
                 photonView.RPC("Shoot", RpcTarget.All);

@@ -1,7 +1,6 @@
 ﻿using Events;
 using Photon.Pun;
 using Services;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,11 +29,6 @@ public class PlayerComponent : MonoBehaviourPun
         Health = BASE_HEALTH;
     }
 
-    void Start ()
-    {
-        Health = BASE_HEALTH;
-	}
-    
     [PunRPC]
     public void ScoreHit(string limb)
     {
