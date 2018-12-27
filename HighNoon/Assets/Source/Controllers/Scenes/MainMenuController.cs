@@ -46,7 +46,8 @@ namespace Controllers
 		public void Start()
 		{
             m_mainMenu.SetActive(true);
-            Service.Rig.Body.transform.position = new Vector3(0f, 1f, 0f);
+            Service.Rig.Body.transform.position = Vector3.up;
+            Service.Rig.Body.transform.rotation = Quaternion.identity;
 		}
 
 		public void Unload()
