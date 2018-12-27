@@ -7,6 +7,7 @@ namespace Events
 		NetPlayerConnected,
 		NetPlayerIdentified,
 		PlayerAimed,
+        PlayerKilled,
         DebugUiActivated,
 		EntitySpawned,
 		EntityDestroyed,

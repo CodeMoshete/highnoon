@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CountdownText: {fileID: 114163133680674318}
+  MessageText: {fileID: 114146911404772624}
 --- !u!114 &114392123954927990
 MonoBehaviour:
   m_ObjectHideFlags: 1

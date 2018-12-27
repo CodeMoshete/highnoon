@@ -32,4 +32,5 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - Shoot
+  - ScoreHit
   DisableAutoOpenWizard: 1

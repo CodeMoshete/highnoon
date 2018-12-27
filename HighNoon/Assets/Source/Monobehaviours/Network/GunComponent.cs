@@ -83,6 +83,9 @@ public class GunComponent : MonoBehaviourPun
         if (Physics.Raycast(ray, out hit, 25f, testLayer))
         {
             Debug.Log("Shot: " + hit.collider.name);
+            PlayerComponent hitPlayer = 
+                hit.collider.transform.parent.GetComponent<PlayerComponent>();
+            hitPlayer.ScoreHit(hit.collider.gameObject.name);
         }
 
         GameObject bulletTrail = Instantiate(Resources.Load<GameObject>("ProjectilePath"));
