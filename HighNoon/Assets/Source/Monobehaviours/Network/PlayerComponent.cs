@@ -26,6 +26,8 @@ public class PlayerComponent : MonoBehaviourPun
         damageAmounts.Add("ElbowRight", 20);
         damageAmounts.Add("ShoulderRight", 30);
         damageAmounts.Add("Head", 100);
+
+        Health = BASE_HEALTH;
     }
 
     void Start ()
