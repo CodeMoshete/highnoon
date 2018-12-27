@@ -26,6 +26,11 @@ public class GunComponent : MonoBehaviourPun
 
     void Update ()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         Vector2 primaryTouchpad = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
         bool pressStarted = OVRInput.GetDown(OVRInput.Button.PrimaryTouchpad);
         bool pressEnded = OVRInput.GetUp(OVRInput.Button.PrimaryTouchpad);
@@ -45,13 +50,14 @@ public class GunComponent : MonoBehaviourPun
         bool isTriggerPressed = OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger);
         if ((isTriggerPressed && isReadyToFire) || Input.GetKeyDown(KeyCode.F))
         {
-            Shoot();
+            photonView.RPC("Shoot", RpcTarget.All);
         }
 
         transform.position = gunLocator.position;
         transform.rotation = gunLocator.rotation;
     }
 
+    [PunRPC]
     public void Shoot()
     {
         Debug.Log("Bang!");
