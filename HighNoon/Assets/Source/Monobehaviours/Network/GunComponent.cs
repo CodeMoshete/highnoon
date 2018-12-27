@@ -68,7 +68,7 @@ public class GunComponent : MonoBehaviourPun
                     hammerTilt = HAMMER_MAX_TILT;
                 }
 
-                Hammer.localEulerAngles = new Vector3(hammerTilt, 0f, 0f);
+                Hammer.localEulerAngles = new Vector3(-hammerTilt, 0f, 0f);
             }
 
             bool isTriggerPressed = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger);
@@ -76,6 +76,8 @@ public class GunComponent : MonoBehaviourPun
 
             if ((isTriggerPressed && isReadyToFire) || Input.GetKeyDown(KeyCode.F))
             {
+                isReadyToFire = false;
+                Hammer.localEulerAngles = Vector3.zero;
                 photonView.RPC("Shoot", RpcTarget.All);
             }
         }
@@ -89,11 +91,13 @@ public class GunComponent : MonoBehaviourPun
     {
         Debug.Log("Bang!");
 
-        if (photonView.Owner.IsLocal)
+        bool didHit = false;
+        RaycastHit hit;
+        Ray ray = new Ray(Muzzle.position, Muzzle.forward);
+        if (Physics.Raycast(ray, out hit, 25f, testLayer))
         {
-            RaycastHit hit;
-            Ray ray = new Ray(Muzzle.position, Muzzle.forward);
-            if (Physics.Raycast(ray, out hit, 25f, testLayer))
+            didHit = true;
+            if (photonView.Owner.IsLocal)
             {
                 Debug.Log("Shot: " + hit.collider.name);
                 PlayerComponent hitPlayer =
@@ -104,7 +108,8 @@ public class GunComponent : MonoBehaviourPun
             }
         }
 
-        GameObject bulletTrail = Instantiate(Resources.Load<GameObject>("ProjectilePath"));
+        string resourcePath = didHit ? "ProjectilePathHit" : "ProjectilePath";
+        GameObject bulletTrail = Instantiate(Resources.Load<GameObject>(resourcePath));
         bulletTrail.GetComponent<TimedDestroy>().Initialize(2f);
         bulletTrail.transform.position = Muzzle.position;
         bulletTrail.transform.rotation = Muzzle.rotation;

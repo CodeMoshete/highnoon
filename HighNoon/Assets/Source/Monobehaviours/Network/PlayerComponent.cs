@@ -41,9 +41,15 @@ public class PlayerComponent : MonoBehaviourPun
             Health -= 20;
         }
 
+        string userId = photonView.Owner.UserId;
+        if (userId == PhotonNetwork.LocalPlayer.UserId)
+        {
+            Service.Rig.ShakeCamera();
+        }
+
         if (Health <= 0)
         {
-            Service.Events.SendEvent(EventId.PlayerKilled, photonView.Owner.UserId);
+            Service.Events.SendEvent(EventId.PlayerKilled, userId);
         }
 
         Debug.Log("Health now at: " + Health);

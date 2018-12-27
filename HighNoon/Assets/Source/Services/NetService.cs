@@ -49,6 +49,7 @@ namespace Services
 		{
 			if(!m_isInitialized)
 			{
+                Debug.Log("Connecting to Photon");
 				//Serialize player team
 				PhotonNetwork.LogLevel = PunLogLevel.ErrorsOnly;
                 PhotonNetwork.AutomaticallySyncScene = true;

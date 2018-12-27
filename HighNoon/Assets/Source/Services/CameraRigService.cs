@@ -10,12 +10,15 @@ public class CameraRigService : IUpdateObserver
     public GameObject HeadBackground { get; private set; }
     public GameObject Eye { get; private set; }
     public GameObject Hand { get; private set; }
+    private Transform trackingSpace;
 
     private float backgroundScale;
     private Vector3 lastPlayerPosition;
     private Transform cameraObject;
+    private ShakeGameObjectAction shaker;
 
     private OculusGoControls controls;
+    private GameObject debugConsole;
 
     public CameraRigService(
         GameObject baseRig, 
@@ -31,6 +34,10 @@ public class CameraRigService : IUpdateObserver
         GameObject handAnchor = UnityUtils.FindGameObject(Head, "RightControllerAnchor");
         Hand.transform.SetParent(handAnchor.transform);
 
+        trackingSpace = UnityUtils.FindGameObject(Body, "TrackingSpace").transform;
+        shaker = Body.AddComponent<ShakeGameObjectAction>();
+        shaker.Target = trackingSpace;
+
         backgroundScale = headBgScale;
         HeadBackground.transform.localScale = 
             new Vector3(backgroundScale, backgroundScale, backgroundScale);
@@ -40,6 +47,7 @@ public class CameraRigService : IUpdateObserver
         Service.Rig = this;
 
         controls = new OculusGoControls();
+        debugConsole = GameObject.Instantiate(Resources.Load<GameObject>("GUI/Gui_DebugConsole"));
 
         Service.FrameUpdate.RegisterForUpdate(this);
     }
@@ -51,5 +59,10 @@ public class CameraRigService : IUpdateObserver
         HeadBackground.transform.localPosition += moveDist;
         HeadBackground.transform.localRotation = cameraObject.transform.rotation;
         lastPlayerPosition = cameraObject.transform.position;
+    }
+
+    public void ShakeCamera()
+    {
+        shaker.Initiate();
     }
 }

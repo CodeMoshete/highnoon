@@ -42,39 +42,13 @@ public class OculusGoControls : IUpdateObserver
 		Vector2 primaryTouchpad = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
 		bool isPressed = OVRInput.Get (OVRInput.Button.PrimaryTouchpad);
 
-        bool MoveUp = isPressed && primaryTouchpad.y > 0.33;
-        bool MoveDown = isPressed && primaryTouchpad.y < -0.33;
-        bool MoveLeft = isPressed && primaryTouchpad.x < -0.33;
-        bool MoveRight = isPressed && primaryTouchpad.x > 0.33;
-
-        //Log("V: " + primaryTouchpad.y + ", H: " + primaryTouchpad.x + ", Dn: " + isPressed);
-
-        if (MoveUp)
-        {
-            bodyObject.transform.Translate(new Vector3(0f, 0f, 1f * dt));
-        }
-        else if (MoveDown)
-        {
-            bodyObject.transform.Translate(new Vector3(0f, 0f, -1f * dt));
-        }
-
         Vector3 euler = bodyObject.transform.eulerAngles;
-        if (MoveLeft)
-        {
-            euler.y -= 75f * dt;
-        }
-        else if (MoveRight)
-        {
-            euler.y += 75f * dt;
-        }
-        bodyObject.transform.eulerAngles = euler;
 
         bool isTriggerPressed = OVRInput.GetDown (OVRInput.Button.PrimaryIndexTrigger);
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U) || OVRInput.GetDown(OVRInput.Button.Back))
         {
             isDebugUiActive = !isDebugUiActive;
             Service.Events.SendEvent(EventId.DebugUiActivated, isDebugUiActive);
-            Log("UI Active: " + isDebugUiActive);
 		}
 
 		if (isMouseCameraActive)
