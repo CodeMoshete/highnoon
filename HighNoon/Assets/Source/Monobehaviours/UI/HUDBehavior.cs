@@ -1,16 +1,18 @@
-﻿using UnityEngine;
+﻿using Services;
+using UnityEngine;
 
 public class HUDBehavior : MonoBehaviour
 {
     private const float CAM_DIST = 0.6f;
+    private const float TRACKING_TIME = 0.3f;
     private readonly Vector3 HUD_TARGET_OFFSET = new Vector3(0f, 0f, CAM_DIST);
-    public Transform PlayerCamera;
-    public float TrackingTime = 0.3f;
+    private Transform PlayerCamera;
     private Transform hudReference;
     private Vector3 hudVelocity;
 
 	public void Start ()
     {
+        PlayerCamera = Service.Rig.Eye.transform;
         hudReference = (new GameObject()).transform;
         hudReference.parent = PlayerCamera;
         hudReference.transform.localPosition = HUD_TARGET_OFFSET;
@@ -22,7 +24,7 @@ public class HUDBehavior : MonoBehaviour
             transform.position, 
             hudReference.position, 
             ref hudVelocity, 
-            TrackingTime);
+            TRACKING_TIME);
 
         Vector3 vecToHud = transform.position - PlayerCamera.position;
         Vector3 upVector = Vector3.Cross(vecToHud, transform.right);

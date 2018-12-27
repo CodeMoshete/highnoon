@@ -1,46 +1,41 @@
-﻿using Events;
-using Services;
+﻿using Services;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HUDLogic : MonoBehaviour
 {
-    public GameObject TriggerPressContainer;
+    [SerializeField]
+    private Text CountdownText;
 
-    public Text TextPromptContainer;
-    public Animator TextPromptAnimator;
+    private int numSeconds;
+    private bool isCountingDown;
+    private Action onCountdownDone;
 
-    public void Start()
+    public void ShowCountdown(int secondsToCount, Action onDone)
     {
-        Service.Events.AddListener(EventId.ShowTriggerPrompt, ShowTriggerPress);
-        Service.Events.AddListener(EventId.ShowPromptText, ShowPromptText);
-        Service.Events.AddListener(EventId.HidePromptText, HidePromptTextFromEvent);
-    }
-
-    public void ShowTriggerPress(object cookie)
-    {
-        bool show = (bool)cookie;
-        TriggerPressContainer.SetActive(show);
-    }
-
-    public void ShowPromptText(object cookie)
-    {
-        PromptTextActionData promptData = (PromptTextActionData)cookie;
-        TextPromptContainer.text = promptData.Prompt;
-        TextPromptAnimator.SetBool("IsVisible", true);
-        if (promptData.Duration > 0)
+        if (!isCountingDown)
         {
-            Service.Timers.CreateTimer(promptData.Duration, HidePromptTextFromTimer, null);
+            gameObject.SetActive(true);
+            isCountingDown = true;
+            onCountdownDone = onDone;
+            numSeconds = secondsToCount;
+            CheckTime(null);
         }
     }
 
-    public void HidePromptTextFromEvent(object cookie)
+    private void CheckTime(object cookie)
     {
-        TextPromptAnimator.SetBool("IsVisible", false);
-    }
-
-    public void HidePromptTextFromTimer(object cookie)
-    {
-        TextPromptAnimator.SetBool("IsVisible", false);
+        if (numSeconds > 0)
+        {
+            CountdownText.text = numSeconds.ToString();
+            numSeconds--;
+            Service.Timers.CreateTimer(1f, CheckTime, null);
+        }
+        else
+        {
+            isCountingDown = false;
+            gameObject.SetActive(false);
+        }
     }
 }

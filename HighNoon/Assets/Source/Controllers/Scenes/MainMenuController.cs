@@ -14,11 +14,13 @@ namespace Controllers
     public class MainMenuController : IStateController, IUpdateObserver
 	{
 		private const string MAIN_MENU_ID = "DuelScenery";
+        private const string HUD_ID = "GUI/Gui_DuelStartScreen";
         private const string START_BUTTON_ID = "StartButton";
         private const string PLAYER_1_POS = "Player1Position";
         private const string PLAYER_2_POS = "Player2Position";
 
         private GameObject m_mainMenu;
+        private HUDLogic hudScreen;
         private SceneLoadedCallback m_onSceneLoaded;
 
         private GameObject playerWeapon;
@@ -26,6 +28,8 @@ namespace Controllers
 		public void Load(SceneLoadedCallback onLoadedCallback, object passedParams)
 		{
             m_mainMenu = GameObject.Instantiate(Resources.Load<GameObject>(MAIN_MENU_ID));
+            hudScreen = 
+                GameObject.Instantiate(Resources.Load<GameObject>(HUD_ID)).GetComponent<HUDLogic>();
 
             GameObject cubeObj = UnityUtils.FindGameObject(m_mainMenu, START_BUTTON_ID);
             cubeObj.GetComponent<LookAtObjectTrigger>().Camera = 
@@ -59,6 +63,7 @@ namespace Controllers
                 "PlayerView", 
                 Service.Rig.Body.transform.position,
                 Service.Rig.Body.transform.rotation);
+            playerView.SetActive(false);
 
             playerWeapon = PhotonNetwork.Instantiate(
                 "GunModel",
@@ -67,15 +72,20 @@ namespace Controllers
 
             if (PhotonNetwork.PlayerList.Length > 1)
             {
-                InitGame(null);
+                StartCountdown(null);
             }
             else
             {
-                Service.Events.AddListener(EventId.NetPlayerConnected, InitGame);
+                Service.Events.AddListener(EventId.NetPlayerConnected, StartCountdown);
             }
         }
 
-        private void InitGame(object cookie)
+        private void StartCountdown(object cookie)
+        {
+            hudScreen.ShowCountdown(3, StartGame);
+        }
+
+        private void StartGame()
         {
             playerWeapon.GetComponent<GunComponent>().Init();
         }
@@ -89,16 +99,6 @@ namespace Controllers
 
             m_mainMenu.SetActive(true);
 			Service.FrameUpdate.RegisterForUpdate(this);
-		}
-
-        private void StartRound()
-        {
-
-        }
-
-		private void StartClicked()
-		{
-			GameObject.Destroy(m_mainMenu);
 		}
 
 		public void Update(float dt)
