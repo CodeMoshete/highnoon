@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 23610887685704980}
   - component: {fileID: 114671691679615012}
   - component: {fileID: 114186815301824578}
+  - component: {fileID: 114882126771793614}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: Untagged
@@ -860,6 +861,17 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
+--- !u!114 &114882126771793614
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1449149356093356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d02bd3aa5ad9c4daf4913ddf22ce80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135034375659059702
 SphereCollider:
   m_ObjectHideFlags: 1
