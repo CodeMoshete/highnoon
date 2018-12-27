@@ -37,6 +37,9 @@ public class CameraRigService : IUpdateObserver
         trackingSpace = UnityUtils.FindGameObject(Body, "TrackingSpace").transform;
         shaker = Body.AddComponent<ShakeGameObjectAction>();
         shaker.Target = trackingSpace;
+        shaker.Intensity = 0.05f;
+        shaker.Duration = 0.5f;
+        shaker.AffectY = true;
 
         backgroundScale = headBgScale;
         HeadBackground.transform.localScale = 
