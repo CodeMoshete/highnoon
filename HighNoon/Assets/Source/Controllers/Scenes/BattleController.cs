@@ -38,10 +38,28 @@ namespace Controllers
             hudScreen =
                 GameObject.Instantiate(Resources.Load<GameObject>(HUD_ID)).GetComponent<HUDLogic>();
 
-            Service.Network.Connect(OnConnected);
-
             m_onSceneLoaded = onLoadedCallback;
             m_onSceneLoaded();
+        }
+
+        public void Start()
+        {
+            Debug.Log("Battle scene started!");
+
+            Service.Rig.Body.transform.position =
+                UnityUtils.FindGameObject(battleScenery, PLAYER_1_POS).transform.position;
+
+            Service.Rig.Body.transform.eulerAngles = new Vector3(0f, 180f, 0f);
+
+            battleScenery.SetActive(true);
+
+            // Wait 2 seconds for transition to complete.
+            Service.Timers.CreateTimer(2f, TryConnect, null);
+        }
+
+        private void TryConnect(object cookie)
+        {
+            Service.Network.Connect(OnConnected);
         }
 
         private void OnConnected()
@@ -100,16 +118,6 @@ namespace Controllers
         private void OnBattleDone()
         {
             onBattleEnd();
-        }
-
-        public void Start()
-        {
-            Service.Rig.Body.transform.position =
-                UnityUtils.FindGameObject(battleScenery, PLAYER_1_POS).transform.position;
-
-            Service.Rig.Body.transform.eulerAngles = new Vector3(0f, 180f, 0f);
-
-            battleScenery.SetActive(true);
         }
 
         public void Unload()

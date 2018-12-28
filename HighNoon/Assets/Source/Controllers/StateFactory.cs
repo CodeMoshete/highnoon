@@ -1,17 +1,15 @@
 // StateFactory.cs
 // Controller class for Loading and Unloading game scenes
 
-using System;
-using System.Collections.Generic;
+using Game.Controllers.Interfaces;
 using GameObjectWrappers;
 using UnityEngine;
-using Game.Controllers.Interfaces;
 
 namespace Game.Factories
 {
-	public class StateFactory
+    public class StateFactory
 	{
-//		private const string TRANSITION_SCREEN_ID = "GUI/gui_transition";
+        private const float TRANSITION_DURATION = 2f;
 		private const string TRANSITION_SCREEN_ID = "GUI/TransitionScreen";
 
 		private IStateController newScene;
@@ -22,17 +20,23 @@ namespace Game.Factories
 		private bool isTransitionDone;
 		private bool isSceneLoaded;
 
-		private TransitionWrapper m_transitionScreen;
+		private ITransitionWrapper m_transitionScreen;
 
 		public StateFactory()
 		{
-			isTransitionDone = true;//Don't show transition screen if it's our first load.
+            //Don't show transition screen if it's our first load.
+            isTransitionDone = true;
 			isSceneLoaded = false;
 
 			GameObject transitionScreen = 
 				GameObject.Instantiate(Resources.Load<GameObject>(TRANSITION_SCREEN_ID)) as GameObject;
-			m_transitionScreen = new TransitionWrapper(transitionScreen);
-		}
+
+#if UNITY_ANDROID
+            m_transitionScreen = new OculusGoTransitionWrapper();
+#else
+            m_transitionScreen = new TransitionWrapper(transitionScreen);
+#endif
+        }
 
 		public void LoadScene<T>(SceneLoadedCallback callback, object passedParams) where T : IStateController, new()
 		{
@@ -42,7 +46,7 @@ namespace Game.Factories
 			if(!isTransitionDone)
 			{
 				m_transitionScreen.SetActive(true);
-				m_transitionScreen.PlayTransitionOut(onTransitionShown);
+				m_transitionScreen.PlayTransitionOut(TRANSITION_DURATION, onTransitionShown);
 			}
 
 			newScene = new T();
@@ -83,7 +87,7 @@ namespace Game.Factories
 
 			currentScene = newScene;
 			currentScene.Start();
-			m_transitionScreen.PlayTransitionIn(OnTransitionHidden);
+			m_transitionScreen.PlayTransitionIn(TRANSITION_DURATION, OnTransitionHidden);
 
 			if(onNewSceneLoaded != null)
 			{

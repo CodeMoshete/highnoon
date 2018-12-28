@@ -10,12 +10,11 @@ using UnityEngine;
 
 namespace GameObjectWrappers
 {
-	public class TransitionWrapper : IUpdateObserver
+	public class TransitionWrapper : IUpdateObserver, ITransitionWrapper
 	{
 		private const string TRANSITION_OVER_EVENT = "transitionOver";
 		private const string TRANSITION_IN_ID = "fadeIn";
 		private const string TRANSITION_OUT_ID = "fadeOut";
-		private const float FADE_DURATION = 1.5f; //seconds
 
 		private GameObject m_wrappedObject;
 		private Action m_onAnimationOver;
@@ -34,18 +33,19 @@ namespace GameObjectWrappers
 			Service.Events.AddListener (EventId.DebugCameraControlsActive, OnDebugControlsToggled);
 		}
 
-		public void PlayTransitionIn(Action onAnimationOver = null)
+		public void PlayTransitionIn(float duration, Action onAnimationOver)
 		{
 			m_onAnimationOver = onAnimationOver;
 			m_animator.SetTrigger(TRANSITION_IN_ID);
-			currentTime = FADE_DURATION;
+			currentTime = duration;
+
 		}
 
-		public void PlayTransitionOut(Action onAnimationOver = null)
+		public void PlayTransitionOut(float duration, Action onAnimationOver)
 		{
 			m_onAnimationOver = onAnimationOver;
 			m_animator.SetTrigger(TRANSITION_OUT_ID);
-			currentTime = FADE_DURATION;
+			currentTime = duration;
 		}
 
 		public void SetActive(bool active)
