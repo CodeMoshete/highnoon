@@ -78,6 +78,7 @@ namespace Controllers
 
         private void StartCountdown(object cookie)
         {
+            GameObject.Instantiate(Resources.Load<GameObject>("Audio/IntroStinger"));
             Service.Events.RemoveListener(EventId.NetPlayerConnected, StartCountdown);
             hudScreen.ShowCountdown(3, StartGame);
         }

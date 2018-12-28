@@ -65,7 +65,11 @@ public class GunComponent : MonoBehaviourPun
                 {
                     isPullingHammer = false;
                     isReadyToFire = dragAmt > HAMMER_THRESHOLD;
-                    hammerTilt = HAMMER_MAX_TILT;
+                    hammerTilt = isReadyToFire ? HAMMER_MAX_TILT : 0f;
+                    if (isReadyToFire)
+                    {
+                        GameObject.Instantiate(Resources.Load<GameObject>("Audio/HammerClick"));
+                    }
                 }
 
                 Hammer.localEulerAngles = new Vector3(-hammerTilt, 0f, 0f);
@@ -90,6 +94,7 @@ public class GunComponent : MonoBehaviourPun
     public void Shoot()
     {
         Debug.Log("Bang!");
+        GameObject.Instantiate(Resources.Load<GameObject>("Audio/Gunshot"));
 
         bool didHit = false;
         RaycastHit hit;

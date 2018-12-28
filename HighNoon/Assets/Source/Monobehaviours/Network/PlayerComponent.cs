@@ -52,6 +52,7 @@ public class PlayerComponent : MonoBehaviourPun
             Service.Events.SendEvent(EventId.PlayerKilled, userId);
         }
 
+        GameObject.Instantiate(Resources.Load<GameObject>("Audio/Hit"));
         Debug.Log("Health now at: " + Health);
     }
 }
