@@ -29,7 +29,7 @@ public class Engine : MonoBehaviour
             Instantiate(Resources.Load<GameObject>("OVRPlayerController")),
             Instantiate(Resources.Load<GameObject>("TrackedRemote")),
             Instantiate(Resources.Load<GameObject>("OVRCameraRigBackground")),
-            0.01f);
+            0.001f);
     }
 
 	public void Update()
